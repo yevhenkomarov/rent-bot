@@ -1,0 +1,21 @@
+{
+  "name": "rent-tracker-bot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^13.13.4",
+    "@types/rc": "^1.1.0",
+    "http": "0.0.1-security",
+    "rc": "^1.2.8",
+    "telegraf": "^3.38.0",
+    "typescript": "^3.8.3"
+  },
+  "devDependencies": {},
+  "description": ""
+}
