@@ -3,6 +3,7 @@ import rc from 'rc'
 export type ConfigT = {
     bot_section:{
         bot_token:string
+        ria_token:string
     }
 }
 
