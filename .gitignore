@@ -1,3 +1,4 @@
 node_modules
 dist
 .rent_tracker_rc
+.js

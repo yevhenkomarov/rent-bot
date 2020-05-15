@@ -1,19 +1,19 @@
-import { TrackRequest } from './TrackRequest'
+import { SearchTrackRequest } from './SearchTrackRequest'
 
 var fullRequest:string;
 export class RequestBuilder{
     public buildTest():string{
-        fullRequest = TrackRequest.endpoint
-        + TrackRequest.search
-        + TrackRequest.category + 4
-        + TrackRequest.realtyType + 0
-        + TrackRequest.operation + 3
-        + TrackRequest.state + 1
-        + TrackRequest.city + 1
-        + TrackRequest.areaFrom + 60
-        + TrackRequest.roomCountFrom + 2
-        + TrackRequest.excludeAgencies
-        + TrackRequest.apiKey
+        fullRequest = SearchTrackRequest.endpoint
+        + SearchTrackRequest.search
+        + SearchTrackRequest.category + 4
+        + SearchTrackRequest.realtyType + 0
+        + SearchTrackRequest.operation + 3
+        + SearchTrackRequest.state + 1
+        + SearchTrackRequest.city + 1
+        + SearchTrackRequest.areaFrom + 60
+        + SearchTrackRequest.roomCountFrom + 2
+        + SearchTrackRequest.excludeAgencies
+        + SearchTrackRequest.apiKey
         + 'oyYath7oUJjYJuWRajk9AJCVxvyQmEaNGJMQpv5V';
         return fullRequest;
     }

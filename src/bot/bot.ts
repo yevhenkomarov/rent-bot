@@ -1,4 +1,4 @@
-import Telegraf from 'telegraf';
+import Telegraf, { Markup, Extra } from 'telegraf';
 
 import { getConfig } from '../config/config';
 import { MainController } from './main/MainController';
@@ -8,7 +8,6 @@ const request: string = "/dom/cities_districts/1?&api_key=oyYath7oUJjYJuWRajk9AJ
 const config = getConfig('rent_tracker_');
 const bot = new Telegraf(config.bot_section.bot_token);
 var controller = new MainController(config.bot_section.ria_token)
-bot.start((ctx) => ctx.reply('Welcome!'));
 bot.hears('e', (ctx) =>{
 (async () => {});
   // Using context shortcut
@@ -16,10 +15,26 @@ bot.hears('e', (ctx) =>{
 })
 bot.launch();
 
-bot.hears("rent", async (ctx) => {
-  ctx.reply("huent");
+bot.command('rent', (ctx) => ctx.reply('select', Markup.inlineKeyboard([
+  Markup.callbackButton('квартира','квартира'),
+  Markup.callbackButton('будинок', 'будинок')
+]).extra()) 
+    
+)
+
+
+bot.action('квартира', async (ctx) => {
+  await ctx.reply('параметри', Markup.inlineKeyboard([
+    Markup.callbackButton('Plain', 'plain'),
+    Markup.callbackButton('Italic', 'italic')
+  ]).extra())
+})
+
+
+bot.hears("r", async (ctx) => {
   var pr = await Promise.resolve(controller.TrackTest());
   // (async () => { 
   //   let res = await controller.testResult;
-    ctx.reply(pr);
+    // ctx.reply(pr);
+  ctx.reply("huent");
 });

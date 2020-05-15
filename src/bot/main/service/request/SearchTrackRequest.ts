@@ -1,5 +1,5 @@
 
-export class TrackRequest{
+export class SearchTrackRequest{
 
 static endpoint:string = "https://developers.ria.com/dom";
 static search:string = '/search?';
