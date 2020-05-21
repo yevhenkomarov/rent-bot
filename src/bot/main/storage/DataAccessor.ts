@@ -14,13 +14,16 @@ export class DataAccessor{
                 currentData.push(element);
             }
         });
-
-    //    fs.createWriteStream('/out');
-    //    let ss = new fs.WriteStream();
-    //    ss.pipe(fs.createWriteStream('/out'));
        
        currentData.forEach(element => {
-        fs.writeFile('file.txt', element.desription, (err) => {if(err) return})
+           if (element.id) {
+            fs.writeFile(`searchResults/${element.type}_${element.id}_${element.price}_${element.currency}.txt`, 
+                element.descriptionUa + "\n"
+                + `ціна: ${element.price} ${element.currency}` + "\n"
+                + `https://dom.ria.com/uk/${element.linkAddress}` + "\n"
+                + element.descriptionRu
+            , (err) => {if(err) return})
+           }
        });
     }
 }

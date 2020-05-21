@@ -1,0 +1,40 @@
+{
+  "items": [
+    {
+      "category": "houses",
+      "type": "house",
+      "operation": "rentMonthly",
+      "minRooms": 2,
+      "maxRooms": 3,
+      "minPrice": 6000,
+      "maxPrice": 9000,
+      "minArea": 55,
+      "maxArea": 100,
+      "excludeAgencies": 1
+    },
+    {
+      "category": "houses",
+      "type": "halfOfHouse",
+      "operation": "rentMonthly",
+      "minRooms": 2,
+      "maxRooms": 3,
+      "minPrice": 6000,
+      "maxPrice": 9000,
+      "minArea": 55,
+      "maxArea": 100,
+      "excludeAgencies": 1
+    },
+    {
+      "category": "flats",
+      "type": "flat",
+      "operation": "rentMonthly",
+      "minRooms": 2,
+      "maxRooms": 3,
+      "minPrice": 5000,
+      "maxPrice": 9000,
+      "minArea": 55,
+      "maxArea": 100,
+      "excludeAgencies": 1
+    }
+  ]
+}

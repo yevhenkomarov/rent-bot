@@ -10,12 +10,16 @@
   "license": "ISC",
   "dependencies": {
     "http": "0.0.1-security",
+    "pg": "^8.2.1",
+    "postgres": "^1.0.2",
     "rc": "^1.2.8",
+    "reflect-metadata": "^0.1.13",
     "superagent": "^5.2.2",
-    "telegraf": "^3.38.0"
+    "telegraf": "^3.38.0",
+    "typeorm": "^0.2.25"
   },
   "devDependencies": {
-    "@types/node": "^13.13.4",
+    "@types/node": "^13.13.8",
     "@types/rc": "^1.1.0",
     "@types/superagent": "^4.1.7",
     "typescript": "^3.8.3"

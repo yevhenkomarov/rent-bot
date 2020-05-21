@@ -1,18 +1,20 @@
 import superagent from 'superagent';
-import { TrackingResults } from './response/TrackingResults';
 import { RentInfoData } from './response/RentInfoData';
 import { DataAccessor } from '../storage/DataAccessor';
 
 export interface ITrackerService{
-    track():TrackingResults;
+    track(requests:Array<string>):void;
     trackTest(request:string):void;
 }
 
 const dataAccessor = new DataAccessor();
 export class TrackerService implements ITrackerService{
-    track(): TrackingResults {
-        //GET
-        return new TrackingResults();
+    track(requests:Array<string>) {
+        requests.forEach(element => {
+            superagent.get(element).end((err, resp) => {
+                this.onResponse(resp.body);
+            });
+        });
     }
     trackTest(request:string){
             superagent.get(request).end((err, resp) => {
@@ -21,10 +23,12 @@ export class TrackerService implements ITrackerService{
     }
     
     onResponse(ids:any){
-        let result = new Array<RentInfoData>(3);        
-        for (let index = 0; index < 3; index++) {
-            const element = ids.items[index];
-            superagent.get(`https://developers.ria.com/dom/info/${element}?api_key=oyYath7oUJjYJuWRajk9AJCVxvyQmEaNGJMQpv5V`).end(
+        let maxIndex = ids.items.length > 5 ? 5 : ids.items.length;
+        let result = new Array<RentInfoData>(maxIndex);
+        for (let index = 0; index < maxIndex; index++) {
+            let element = ids.items[index];
+            superagent.get(`https://developers.ria.com/dom/info/${element}?api_key=oyYath7oUJjYJuWRajk9AJCVxvyQmEaNGJMQpv5V`
+            + '&lang_id=4').end(
                 (err,res) => {
                     let curr = new RentInfoData();
                     curr.id = element;
@@ -34,9 +38,12 @@ export class TrackerService implements ITrackerService{
                     curr.creationDate = res.body.created_at;
                     curr.floor = res.body.floor;
                     curr.roomsCount = res.body.rooms_count;
-                    curr.type = res.body.type;
+                    curr.type = res.body.realty_type_name_uk;
                     curr.phone = res.body.user_id; //retrieve phone number by userId
-                    curr.desription = res.body.description_uk;
+                    curr.descriptionUa = res.body.description_uk;
+                    curr.descriptionRu = res.body.description;
+                    curr.price = res.body.price_total;
+                    curr.currency = res.body.currency_type;
                     result[index] = curr;
                     if (index == result.length - 1) {
                         dataAccessor.updateData(result);

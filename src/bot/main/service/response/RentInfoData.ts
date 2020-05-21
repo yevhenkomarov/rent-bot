@@ -10,6 +10,9 @@ export class RentInfoData{
         public floor?:number, 
         public roomsCount?:number,
         public area?:number,
-        public desription?:string) {                
+        public descriptionUa?:string,
+        public descriptionRu?:string,
+        public price?:number,
+        public currency?:string) {                
     }
 }

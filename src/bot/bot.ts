@@ -1,4 +1,5 @@
-import Telegraf, { Markup, Extra } from 'telegraf';
+import Telegraf, { Markup } from 'telegraf';
+import "reflect-metadata";
 
 import { getConfig } from '../config/config';
 import { MainController } from './main/MainController';
@@ -12,7 +13,7 @@ bot.hears('e', (ctx) =>{
 (async () => {});
   // Using context shortcut
   ctx.reply(`Hello na khuy bleat ${ctx.chat?.first_name}`)
-})
+}) 
 bot.launch();
 
 bot.command('rent', (ctx) => ctx.reply('select', Markup.inlineKeyboard([
@@ -32,9 +33,6 @@ bot.action('квартира', async (ctx) => {
 
 
 bot.hears("r", async (ctx) => {
-  var pr = await Promise.resolve(controller.TrackTest());
-  // (async () => { 
-  //   let res = await controller.testResult;
-    // ctx.reply(pr);
-  ctx.reply("huent");
+  Promise.resolve(controller.track());
+  ctx.reply("request sent");
 });
