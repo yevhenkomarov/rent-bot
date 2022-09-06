@@ -1,14 +1,24 @@
 import superagent from 'superagent';
 import { RentInfoData } from './response/RentInfoData';
 import { DataAccessor } from '../storage/DataAccessor';
+import { Service } from 'typedi';
 
 export interface ITrackerService{
+    getUrls(): string[]
     track(requests:Array<string>):void;
     trackTest(request:string):void;
 }
 
-const dataAccessor = new DataAccessor();
+const token = 'oyYath7oUJjYJuWRajk9AJCVxvyQmEaNGJMQpv5V';
+@Service()
 export class TrackerService implements ITrackerService{
+
+    constructor(private readonly dataAccessor: DataAccessor){};
+    
+    getUrls(): string[] {
+        return this.urls;
+    }
+    private urls = new Array<string>();
     track(requests:Array<string>) {
         requests.forEach(element => {
             superagent.get(element).end((err, resp) => {
@@ -23,11 +33,11 @@ export class TrackerService implements ITrackerService{
     }
     
     onResponse(ids:any){
-        let maxIndex = ids.items.length > 5 ? 5 : ids.items.length;
-        let result = new Array<RentInfoData>(maxIndex);
-        for (let index = 0; index < maxIndex; index++) {
+        // let maxIndex = ids.items.length > 5 ? 5 : ids.items.length;
+        let result = new Array<RentInfoData>(ids.items.length);
+        for (let index = 0; index < ids.items.length; index++) {
             let element = ids.items[index];
-            superagent.get(`https://developers.ria.com/dom/info/${element}?api_key=oyYath7oUJjYJuWRajk9AJCVxvyQmEaNGJMQpv5V`
+            superagent.get(`https://developers.ria.com/dom/info/${element}?api_key=${token}`
             + '&lang_id=4').end(
                 (err,res) => {
                     let curr = new RentInfoData();
@@ -46,7 +56,11 @@ export class TrackerService implements ITrackerService{
                     curr.currency = res.body.currency_type;
                     result[index] = curr;
                     if (index == result.length - 1) {
-                        dataAccessor.updateData(result);
+                        this.dataAccessor.updateData(result);
+                    }
+
+                    if (!this.urls.some(t => t == res.body.beautiful_url)){
+                        this.urls.push(res.body.beautiful_url);
                     }
                 }
             )               

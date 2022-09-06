@@ -6,8 +6,8 @@
       "operation": "rentMonthly",
       "minRooms": 2,
       "maxRooms": 3,
-      "minPrice": 6000,
-      "maxPrice": 9000,
+      "minPrice": 9000,
+      "maxPrice": 15000,
       "minArea": 55,
       "maxArea": 100,
       "excludeAgencies": 1
@@ -30,9 +30,9 @@
       "operation": "rentMonthly",
       "minRooms": 2,
       "maxRooms": 3,
-      "minPrice": 5000,
-      "maxPrice": 9000,
-      "minArea": 55,
+      "minPrice": 9000,
+      "maxPrice": 13500,
+      "minArea": 65,
       "maxArea": 100,
       "excludeAgencies": 1
     }
