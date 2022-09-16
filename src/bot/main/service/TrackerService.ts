@@ -3,43 +3,37 @@ import { RentInfoData } from './response/RentInfoData';
 import { DataAccessor } from '../storage/DataAccessor';
 import { Service } from 'typedi';
 
-export interface ITrackerService{
-    getUrls(): string[]
-    track(requests:Array<string>):void;
-    trackTest(request:string):void;
-}
-
 const token = 'oyYath7oUJjYJuWRajk9AJCVxvyQmEaNGJMQpv5V';
 @Service()
-export class TrackerService implements ITrackerService{
+export class TrackerService {
 
     constructor(private readonly dataAccessor: DataAccessor){};
-    
-    getUrls(): string[] {
-        return this.urls;
-    }
-    private urls = new Array<string>();
     track(requests:Array<string>) {
         requests.forEach(element => {
             superagent.get(element).end((err, resp) => {
-                this.onResponse(resp.body);
+                try {
+                    this.onResponse(resp?.body);
+                }
+                catch (err) {
+                    console.log(err);
+                }
             });
         });
     }
-    trackTest(request:string){
-            superagent.get(request).end((err, resp) => {
-                this.onResponse(resp.body);
-            });
-    }
     
     onResponse(ids:any){
-        // let maxIndex = ids.items.length > 5 ? 5 : ids.items.length;
         let result = new Array<RentInfoData>(ids.items.length);
         for (let index = 0; index < ids.items.length; index++) {
             let element = ids.items[index];
             superagent.get(`https://developers.ria.com/dom/info/${element}?api_key=${token}`
             + '&lang_id=4').end(
                 (err,res) => {
+
+                    if (err) {
+                        console.log(err);
+                        return;
+                    }
+
                     let curr = new RentInfoData();
                     curr.id = element;
                     curr.linkAddress = res.body.beautiful_url;
@@ -54,13 +48,9 @@ export class TrackerService implements ITrackerService{
                     curr.descriptionRu = res.body.description;
                     curr.price = res.body.price_total;
                     curr.currency = res.body.currency_type;
-                    result[index] = curr;
+                    result.push(curr);
                     if (index == result.length - 1) {
                         this.dataAccessor.updateData(result);
-                    }
-
-                    if (!this.urls.some(t => t == res.body.beautiful_url)){
-                        this.urls.push(res.body.beautiful_url);
                     }
                 }
             )               

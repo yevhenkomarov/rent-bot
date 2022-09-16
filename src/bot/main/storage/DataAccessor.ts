@@ -8,18 +8,17 @@ let currentData: Array<RentInfoData>;
 @Service()
 export class DataAccessor {
 
-    private users!: UserDataDto[];
     private dbConnection: Database;
 
     constructor() {
-        this.dbConnection = new Database(this.onUpdateUsersFromDb);
+        this.dbConnection = new Database();
     }
 
-    addUserToDb(userChatId: number, userName?: string) {
-        this.dbConnection.addUserToList(userChatId, userName);
+    addUserToDb(userChatId: number, userName?: string): Promise<string> {
+        return this.dbConnection.addUserToList(userChatId, userName);
     }
 
-    public updateData(newData: Array<RentInfoData>): void {
+    updateData(newData: Array<RentInfoData>): void {
         if (currentData == undefined) {
             currentData = newData;
         }
@@ -51,7 +50,15 @@ export class DataAccessor {
         this.dbConnection.addRentInfo(element);
     }
 
-    private onUpdateUsersFromDb(u: UserDataDto[]) {
-        this.users = u;
-    };
+    getAllItems() {
+        return this.dbConnection.getAllAdvertisements();
+    }
+
+    getNewItems(userId: string | undefined) {
+        return this.dbConnection.getUrlsForUser(userId);
+    }
+
+    getUsersToUpdate(): Promise<UserDataDto[]> {
+        return this.dbConnection.getUsers();
+    }
 }

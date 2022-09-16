@@ -1,28 +1,21 @@
-import Telegraf from "telegraf";
-import { getTrackedData, track } from "./main/MainController";
+import Telegraf, { Context, Markup } from "telegraf";
+import Container from "typedi";
+import { getNewItems, getTrackedData, track } from "./main/MainController";
 import { DataAccessor } from "./main/storage/DataAccessor";
 
 const bot = new Telegraf('1182228677:AAHIIncVSpb4XWVR4Q3n1Tr-cqVIAqkZSuA');
-let chatId: number|undefined = 0;
+var dataAccessor = Container.get(DataAccessor);
 
 export async function startBot(dataAccessor: DataAccessor) {
     bot.launch();
-    bot.start((context) => {
-        chatId = context.chat?.id;
-        dataAccessor.addUserToDb(chatId ?? 0, context.chat?.first_name);
-        context.reply(`Здоров ${context.chat?.first_name}. Додав тебе в свою базу даних під айді - ${context.chat?.id}`);
+    bot.start(async (context) => {
+        const chatId = context.chat?.id;
+        const addUserResult = await dataAccessor.addUserToDb(chatId ?? 0, context.chat?.first_name);
+        context.reply(addUserResult);
+        
     })
     bot.hears('e', (ctx) => {
-        (async () => { });
         ctx.reply(`Hello na khuy bleat ${ctx.chat?.first_name}`)
-        setInterval(() => {
-            getTrackedData().forEach(element => {
-                bot.telegram.sendMessage(chatId ?? '', 'https://dom.ria.com/uk/' + element)
-            });
-
-
-            getTrackedData()
-        }, 10000);
     })
 
 
@@ -32,9 +25,49 @@ export async function startBot(dataAccessor: DataAccessor) {
     });
 
 
-    bot.hears("ls", (ctx) => {
-        getTrackedData().forEach(element => {
-            ctx.reply('https://dom.ria.com/uk/' + element);
+    bot.hears("all", async (ctx) => {
+        const dsa: Array<{link: string}> = await getTrackedData() as Array<{link: string}>;
+        
+        dsa.forEach(element => {
+            ctx.reply('https://dom.ria.com/uk/' + element.link);
         });
     });
+
+    bot.hears("new", async (ctx) => {
+        const id = ctx.chat?.id?.toString();
+
+        if (!id) {
+            return;
+        }
+
+        const result: Array<string> = await getNewItems(id);;
+        
+        result.forEach(element => {
+            ctx.reply('https://dom.ria.com/uk/' + element);
+        });
+    })
+}
+
+export async function sendUpdates() {
+    const usersToUpdate = await dataAccessor.getUsersToUpdate();
+
+    if (!usersToUpdate) {
+        console.log("no users to update");
+        return;
+    }
+
+    for (let index = 0; index < usersToUpdate.length; index++) {
+        const user = usersToUpdate[index];
+        if (!user.chat_id) {
+            console.log('user chat id is empty')
+            return;            
+        }
+        const newAdvertisements = await dataAccessor.getNewItems(user.chat_id?.toString());
+
+        if (!newAdvertisements || newAdvertisements.length == 0) {
+            bot.telegram.sendMessage(user.chat_id ?? '', `${user.user_name}, на жаль нових оголошень немає`);
+        }
+
+        newAdvertisements.forEach(element => bot.telegram.sendMessage(user.chat_id ?? '', 'https://dom.ria.com/uk/' + element));
+    }
 }
