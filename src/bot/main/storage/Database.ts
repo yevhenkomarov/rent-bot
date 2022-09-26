@@ -6,24 +6,24 @@ export class Database {
     private dbConnection: Connection | undefined;
 
     constructor() {
-        try {
-            this.dbConnection =
-                this.dbConnection = mysql.createConnection({
-                    host: "localhost",
-                    user: "root",
-                    database: "rent",
-                    password: "Mkvpcb-18"
-                });
-            this.dbConnection.connect();
-            this.dbConnection.ping(err => {
-                if (err) {
-                    console.log(err);
-                }
-            });
+        // try {
+        //     this.dbConnection =
+        //         this.dbConnection = mysql.createConnection({
+        //             host: "localhost",
+        //             user: "root",
+        //             database: "rent",
+        //             password: "Mkvpcb-18"
+        //         });
+        //     this.dbConnection.connect();
+        //     this.dbConnection.ping(err => {
+        //         if (err) {
+        //             console.log(err);
+        //         }
+        //     });
             
-        } catch (error) {
-            console.log(error);
-        }
+        // } catch (error) {
+        //     console.log(error);
+        // }
     }
     getUsers(): Promise<UserDataDto[]> {
         return this.requestUsersFromDb();
