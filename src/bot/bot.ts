@@ -8,7 +8,7 @@ import { Container, Service } from 'typedi';
 // const config = getConfig('rent_tracker_');
 
 
-startBot(Container.get(DataAccessor));
+// startBot(Container.get(DataAccessor));
 
 track()
 
@@ -16,7 +16,7 @@ setInterval(() => {
   track()
 }, 1.8e+6);
 
-sendUpdates();
+// sendUpdates();
 // setInterval(() => {
 //   sendUpdates()
 // }, 2.1e+6);

@@ -62,6 +62,13 @@ export class Database {
             });
     }
 
+    async getAllAdvertisementsIds(){
+        return await this.dbConnection?.promise().query('SELECT id FROM rentable')
+            .then(([rows,fields]) => {
+                return rows;
+            });
+    }
+
     async addUserToList(userChatId: number, userName?: string): Promise<string> {
         const existingUsers =  await this.requestUsersFromDb();
 

@@ -1,5 +1,4 @@
 import { RentInfoData } from "../service/response/RentInfoData";
-import fs = require('fs');
 import { Database, UserDataDto } from "./Database";
 import { Service } from 'typedi';
 
@@ -24,34 +23,30 @@ export class DataAccessor {
         }
 
         newData.forEach(element => {
-            if (currentData.some((c) => c.id != element.id)) {
+            if (!currentData.includes(element)) {
                 currentData.push(element);
             }
         });
 
-        if (!fs.existsSync('searchResults')) {
-            fs.mkdir('searchResults', () => { })
-        }
-
         currentData.forEach(element => {
             if (element.id) {
                 this.writeToDb(element);
-
-                fs.writeFile(`searchResults/${element.type}_${element.id}_${element.price}_${element.currency}.txt`,
-                    element.descriptionUa + "\n"
-                    + `ціна: ${element.price} ${element.currency}` + "\n"
-                    + `https://dom.ria.com/uk/${element.linkAddress}` + "\n"
-                    + element.descriptionRu
-                    , (err) => { if (err) return })
             }
         });
     }
+    
     writeToDb(element: RentInfoData) {
         this.dbConnection.addRentInfo(element);
     }
 
-    getAllItems() {
-        return this.dbConnection.getAllAdvertisements();
+    async getAllItemsLinks(): Promise<Array<string>> {
+        const all: Array<{link: string}> = await this.dbConnection.getAllAdvertisements() as Array<{link: string}>;
+        return Array.from(all, (v, k) => v.link);
+    }
+
+    async getAllItemsIds(): Promise<Array<string>> {
+        const all: Array<{id: string}> = await this.dbConnection.getAllAdvertisementsIds() as Array<{id: string}>;
+        return Array.from(all, (v, k) => v.id);
     }
 
     getNewItems(userId: string | undefined) {

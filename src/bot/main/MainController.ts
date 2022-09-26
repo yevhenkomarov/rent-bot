@@ -13,12 +13,12 @@ export function track() {
     let trackParams:any;
         trackParams = JSON.parse(callb.toString());
         let requests = requestBuilder.buildByParams(trackParams);
-        trackerService.track(requests);
+        trackerService.trackAsync(requests);
     });        
 }
 
 export async function getTrackedData() {
-    return await dataAccessor.getAllItems()
+    return await dataAccessor.getAllItemsLinks()
 };
 
 export async function getNewItems(userId: string) {

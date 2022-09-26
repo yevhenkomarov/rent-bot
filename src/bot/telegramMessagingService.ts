@@ -26,9 +26,9 @@ export async function startBot(dataAccessor: DataAccessor) {
 
 
     bot.hears("all", async (ctx) => {
-        const dsa: Array<{link: string}> = await getTrackedData() as Array<{link: string}>;
+        const links = await getTrackedData();
         
-        dsa.forEach(element => {
+        links.forEach(element => {
             ctx.reply('https://dom.ria.com/uk/' + element.link);
         });
     });

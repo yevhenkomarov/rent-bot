@@ -36,7 +36,6 @@ export class RequestBuilder{
             + SearchTrackRequest.excludeAgencies + element.excludeAgencies
             + SearchTrackRequest.apiKey + 'oyYath7oUJjYJuWRajk9AJCVxvyQmEaNGJMQpv5V'
             + '&lang_id=4';
-            // + ',1437_1435%3A1436';
             results.push(request);
         });
         return results;
