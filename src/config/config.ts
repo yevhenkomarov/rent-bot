@@ -7,10 +7,10 @@ export type ConfigT = {
     }
 }
 
-export function getConfig(name:string): ConfigT {
+export function getConfig(name:string): void {
     const config = rc(name)
     if (!config){
         throw new Error('config by name not found')
     }
-    return <ConfigT>config;
+    // return <ConfigT>config;
 }
