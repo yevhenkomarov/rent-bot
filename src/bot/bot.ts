@@ -10,13 +10,13 @@ import { Container, Service } from 'typedi';
 
 startBot(Container.get(DataAccessor));
 
-track()
+// track()
 
-setInterval(() => {
-  track()
-}, 1.8e+6);
+// setInterval(() => {
+//   track()
+// }, 1.8e+6);
 
-sendUpdates();
-setInterval(() => {
-  sendUpdates()
-}, 2.1e+6);
+// sendUpdates();
+// setInterval(() => {
+//   sendUpdates()
+// }, 2.1e+6);
