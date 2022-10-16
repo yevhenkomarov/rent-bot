@@ -14,8 +14,11 @@ export async function startBot(dataAccessor: DataAccessor) {
         context.reply(addUserResult);
         
     })
-    bot.hears('e', (ctx) => {
-        ctx.reply(`Hello na khuy bleat ${ctx.chat?.first_name}`)
+    bot.hears('e', async (ctx) => {
+        ctx.reply(`Hello na khuy bleat ${ctx.chat?.first_name}`);
+        const chatId = ctx.chat?.id;
+        const addUserResult = await dataAccessor.addUserToDb(chatId ?? 0, ctx.chat?.first_name);
+        ctx.reply(addUserResult);
     })
 
 
@@ -29,7 +32,7 @@ export async function startBot(dataAccessor: DataAccessor) {
         const links = await getTrackedData();
         
         links.forEach(element => {
-            ctx.reply('https://dom.ria.com/uk/' + element.link);
+            ctx.reply('https://dom.ria.com/uk/' + element);
         });
     });
 

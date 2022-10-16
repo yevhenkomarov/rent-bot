@@ -1,16 +1,19 @@
 import { RentInfoData } from "../service/response/RentInfoData";
-import { Database, UserDataDto } from "./Database";
+import { DatabaseMsql, UserDataDto } from "./Database";
 import { Service } from 'typedi';
+import { PostgresqlDatabase } from "./DatabasePostgresql";
+import { IDataBase } from "./IDataBase";
 
 let currentData: Array<RentInfoData>;
 
 @Service()
 export class DataAccessor {
 
-    private dbConnection: Database;
+    // private dbConnection: Database;
+    private dbConnection: IDataBase;
 
     constructor() {
-        this.dbConnection = new Database();
+        this.dbConnection = new PostgresqlDatabase();
     }
 
     addUserToDb(userChatId: number, userName?: string): Promise<string> {
@@ -40,13 +43,13 @@ export class DataAccessor {
     }
 
     async getAllItemsLinks(): Promise<Array<string>> {
-        const all: Array<{link: string}> = await this.dbConnection.getAllAdvertisements() as Array<{link: string}>;
-        return Array.from(all, (v, k) => v.link);
+        const all = await this.dbConnection.getAllAdvertisements();
+        return Array.from(all, (v, k) => v.link ?? "");
     }
 
     async getAllItemsIds(): Promise<Array<string>> {
-        const all: Array<{id: string}> = await this.dbConnection.getAllAdvertisementsIds() as Array<{id: string}>;
-        return Array.from(all, (v, k) => v.id);
+        const all = await this.dbConnection.getAllAdvertisements();
+        return Array.from(all, (v, k) => v.id ?? "");
     }
 
     getNewItems(userId: string | undefined) {

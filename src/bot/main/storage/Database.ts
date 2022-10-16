@@ -1,7 +1,8 @@
 import mysql, { Connection, RowDataPacket } from "mysql2";
 import { RentInfoData } from "../service/response/RentInfoData";
+import { IDataBase } from "./IDataBase";
 
-export class Database {
+export class DatabaseMsql implements IDataBase {
 
     private dbConnection: Connection | undefined;
 
@@ -30,7 +31,7 @@ export class Database {
     }
 
     async getUrlsForUser(userId: string | undefined): Promise<string[]> {
-        const allAdvertisements = await this.getAllAdvertisements() as Array<{ link: string, id: number }>;
+        const allAdvertisements = await this.getAllAdvertisements();
         const existingUsers = await this.requestUsersFromDb();
         const urls: Array<string> = [];
         const ids: Array<string> = [];
@@ -43,23 +44,23 @@ export class Database {
 
         for (let index = 0; index < allAdvertisements.length; index++) {
             const adv = allAdvertisements[index];
-            if (currentUserData?.shown_ids?.some(id => id == adv.id.toString())) {
+            if (adv && currentUserData?.shown_ids?.some(id => id == adv.id?.toString())) {
                 continue;
             }
             else {
-                urls.push(adv.link);
+                urls.push(adv.link ?? "");
             }
         }
 
-        this.addIdToShown(userId, Array.from(allAdvertisements, (v) => v.id.toString()));
+        this.addIdToShown(userId, Array.from(allAdvertisements, (v) => v.id?.toString() ?? ""));
         return urls;
     }
 
-    async getAllAdvertisements(){
+    async getAllAdvertisements(): Promise<AdvertisementDTO[]>{
         return await this.dbConnection?.promise().query('SELECT link, id FROM rentable')
             .then(([rows,fields]) => {
                 return rows;
-            });
+            }) as AdvertisementDTO[];
     }
 
     async getAllAdvertisementsIds(){
@@ -83,7 +84,7 @@ export class Database {
     }
 
     async addRentInfo(element: RentInfoData) {
-        let existing = await this.dbConnection?.promise().query('SELECT id FROM rentable')
+        const existing = await this.dbConnection?.promise().query('SELECT id FROM rentable')
         .then(([rows, fields]) => {
             return rows;
         })

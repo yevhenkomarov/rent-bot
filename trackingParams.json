@@ -10,7 +10,7 @@
       "maxPrice": 15000,
       "minArea": 65,
       "maxArea": 100,
-      "excludeAgencies": 1
+      "excludeAgencies": 0
     },
     {
       "category": "houses",
@@ -22,7 +22,7 @@
       "maxPrice": 15000,
       "minArea": 65,
       "maxArea": 100,
-      "excludeAgencies": 1
+      "excludeAgencies": 0
     },
     {
       "category": "flats",
@@ -34,7 +34,7 @@
       "maxPrice": 14000,
       "minArea": 65,
       "maxArea": 100,
-      "excludeAgencies": 1
+      "excludeAgencies": 0
     }
   ]
 }
