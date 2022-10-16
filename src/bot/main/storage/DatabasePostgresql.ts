@@ -69,14 +69,22 @@ export class PostgresqlDatabase implements IDataBase {
         return Array.from(result, (v) => v.link);
     }
     getUrlsForUser(userId: string | undefined): Promise<string[]> {
-        console.log('Method not implemented.');
+        try {
+        } catch (error) {
+            console.log('Method not implemented getUrlsForUser.');
+        }
         return Promise.resolve(
             []
         );
     }
     getUsers(): Promise<UserDataDto[]> {
-        console.log('Method not implemented.');
-        return Promise.resolve([]);
+        try {
+        } catch (error) {
+            console.log('Method not implemented getUsers.');
+        }
+        return Promise.resolve(
+            []
+        );
     }
 
     async addUserToList(userChatId: number, userName?: string): Promise<string> {
